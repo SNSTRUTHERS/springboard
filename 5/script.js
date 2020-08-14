@@ -891,9 +891,10 @@ new_meme_form.addEventListener("submit", event => {
                     "image/tiff",
                     "image/svg+xml"
                 ].includes(file.type)
-            )
+            ) {
+                meme_name_input.value = "";
                 new_meme(file_reader.result, text_boxes);
-            else
+            } else
                 alert(`Invalid image file: ${file.name}`);
         });
         file_reader.addEventListener("error", event => {
@@ -914,6 +915,7 @@ new_meme_form.addEventListener("submit", event => {
         break;
     }
 
+    meme_name_input.value = "";
     new_meme(img_url, text_boxes);
 });
 
