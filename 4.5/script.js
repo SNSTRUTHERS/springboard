@@ -269,7 +269,7 @@ function endGame() {
     let numPairs = gameContainer.children.length / 2;
 
     // update best score & save to localStorage if needed
-    if (!bestScores[numPairs] || score > bestScores[numPairs]) {
+    if (!bestScores[numPairs] || score < bestScores[numPairs]) {
         bestScores[numPairs] = score;
         bestScoreText.innerText = `BEST SCORE: ${bestScores[numPairs]}`;
 
