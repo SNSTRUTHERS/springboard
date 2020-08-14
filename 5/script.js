@@ -324,6 +324,54 @@ save_meme_btn.addEventListener("click", event => {
     });
 });
 
+const save_image_btn = document.getElementById("save_image");
+if (save_image_btn.getAttribute("disabled") !== "")
+    save_image_btn.setAttribute("disabled", "");
+save_image_btn.addEventListener("click", event => {
+    const canvas = document.getElementsByTagName("canvas")[0];
+    canvas.width = current_image.width;
+    canvas.height = current_image.height;
+
+    const context = canvas.getContext("2d");
+    context.fillStyle = "#000000";
+    context.drawImage(current_image, 0, 0);
+
+    context.textAlign = "center";
+    context.shadowColor = "#000000";
+
+    const meme_bg = document.getElementById("meme_background");
+
+    let i = 0;
+    for (let box of box_properties.children) {
+        context.font = 
+            `${parseFloat(box.querySelector(".size").value)}px ${box.querySelector(".font").value}`
+        ;
+        context.fillStyle = box.querySelector(".color").value;
+        
+        const width = parseFloat(box.querySelector(".width").value) *
+            (box.querySelector(".shadow").checked ? 1 : -1);
+        
+        // set up shadow or outline
+        context.shadowBlur = 0;
+        context.lineWidth = 0;
+        if (width < 0)
+            context.lineWidth = -width;
+        else
+            context.shadowBlur = width;
+
+        context.fillText(meme_bg.children[i].innerText);
+
+        context.shadowBlur = 0;
+        context.lineWidth = 0;
+
+        context.strokeText(meme_bg.children[i].innerText);
+        
+        i++;
+    }
+
+    canvas.style.display = "block";
+});
+
 const save_template_btn = document.getElementById("save_template");
 if (save_template_btn.getAttribute("disabled") !== "")
     save_template_btn.setAttribute("disabled", "");
@@ -799,6 +847,7 @@ function new_meme(img_url, text_boxes, after = () => {}) {
         // enable sidebar inputs
         meme_name_input.removeAttribute("disabled");
         save_meme_btn.removeAttribute("disabled");
+        save_image_btn.removeAttribute("disabled");
         save_template_btn.removeAttribute("disabled");
 
         // create new meme background

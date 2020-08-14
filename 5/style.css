@@ -575,3 +575,7 @@ input[type="file"] {
 .small_box {
     width: 45px;
 }
+
+canvas {
+    display: none;
+}
