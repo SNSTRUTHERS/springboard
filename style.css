@@ -71,7 +71,8 @@ body {
     color: white;
 
     word-wrap: break-word;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 a:link {
