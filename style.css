@@ -1,0 +1,103 @@
+/* -- FONT FACE DECLARATIONS -------------------------------------------------------------------- */
+
+@font-face {
+    font-family: "Anonymous Pro";
+    src: url(res/anon_pro.ttf);
+
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Anonymous Pro";
+    src: url(res/anon_pro_italic.ttf);
+
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Anonymous Pro";
+    src: url(res/anon_pro_bold.ttf);
+
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Anonymous Pro";
+    src: url(res/anon_pro_bold_italic.ttf);
+
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Libertinus Sans";
+    src: url(res/libertinus_sans.otf);
+
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Libertinus Sans";
+    src: url(res/libertinus_sans_italic.otf);
+
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Libertinus Sans";
+    src: url(res/libertinus_sans_bold.otf);
+
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* -- REGULAR STYLING --------------------------------------------------------------------------- */
+
+* {
+    font-family: "Anonymous Pro", 'Lucida Console', 'Courier New', monospace;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 20px;
+    background: black;
+    color: white;
+
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+a:link {
+    color: #5f5fff;
+}
+
+a:visited {
+    color: #a764a7;
+}
+
+/* -- BLINKING CURSOR --------------------------------------------------------------------------- */
+
+@keyframes blinking {
+    0% { background: white; }
+    50% { background: black; }
+    100% { background: white; }
+}
+
+body::after {
+    content: " ";
+    white-space: pre;
+
+    animation-name: blinking;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: step-end;
+}
+
+
