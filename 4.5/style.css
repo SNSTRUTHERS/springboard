@@ -1,0 +1,94 @@
+body {
+    background: #d0d0d0;
+    margin: 0;
+
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 2.5em;
+}
+
+#ui {
+    padding: 0.5em 2em;
+
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+
+    background: #e0e0e0;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#ui p {
+    margin-bottom: 0px;
+}
+
+#game {
+    flex-grow: 1;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(80px, 1fr));
+
+    margin: 1em;
+}
+
+#game div {
+    background-repeat: repeat;
+    background-size: contain;
+    
+    box-shadow: -4px 4px #b8b8b8;
+
+    cursor: pointer;
+    
+    -o-transition: transform 0.25s linear, box-shadow 0.25s ease;
+    -webkit-transition: transform 0.25s linear, box-shadow 0.25s ease;
+    transition: transform 0.25s linear, box-shadow 0.25s ease;
+
+    z-index: 0;
+
+    background: url(back.png);
+    background-size: contain;
+
+    margin: 2px;
+    max-height: 100px;
+    
+    transform: scale(-1, 1);
+}
+
+#game div:not(.flipping):not(.flipped):hover {
+    -webkit-filter: brightness(1.1);
+    filter: brightness(1.1);
+}
+
+#game div.flipping {
+    background: url(back.png);
+    background-size: contain;
+    box-shadow: 0px 4px #b8b8b8;
+    transform: scale(0, 1);
+}
+
+#game div.flipping.flipped {
+    background: var(--color);
+    background-size: contain;
+    box-shadow: 0px 4px #b8b8b8;
+    transform: scale(0, 1);
+}
+
+#game div.flipped {
+    cursor: default;
+
+    background: var(--color);
+    background-size: contain;
+    
+    transform: scale(1, 1);
+
+    box-shadow: 4px 4px #b8b8b8;
+}

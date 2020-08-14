@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Memory Game!</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="ui">
+            <h1>Memory Game!</h1>
+
+            <form action="">
+                <label for="pair_count">Number of pairs:</label>
+                <input type="number" id="pair_count" name="pair_count" min="1" value="5" required/>
+
+                <input type="submit" id="start" value="Start Game" />
+            </form>
+
+            <p id="score">SCORE: 0</p>
+            <p id="best_score">BEST SCORE: 0</p>
+        </div>
+
+        <div id="game"></div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
