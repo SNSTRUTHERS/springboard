@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>The Simon Meme Generator</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body style="--mlh: 225px; --mrh: 5px; --sbw: 320px; --mliw: 160px;">
+        <div id="workspace">
+        </div>
+
+        <div id="sidebar">
+            <input type="text" id="meme_name" placeholder="Name your meme" disabled>
+
+            <div id="sidebar_buttons">
+                <button id="save_meme" disabled>Save Meme</button>
+                <button id="save_template" disabled>Save Template</button>
+            </div>
+            <br>
+
+            <div id="box_properties">
+            </div>
+        </div>
+        
+        <div id="meme_list_resizer">
+
+        </div>
+
+        <div id="meme_list_container">
+            <div id="new_meme_button"></div>
+
+            <div id="ul_container">
+                <ul id="meme_list">
+                </ul>
+            </div>
+        </div>
+
+        <div id="new_meme_form">
+            <div class="x_button"></div>
+            <h2>Select a meme template:</h2>
+            <form action="">
+                <input type="radio" id="url" value="url" name="type">
+                <label for="url">From URL</label>
+                
+                <input type="radio" id="file" value="file" name="type">
+                <label for="file">From File</label>
+                
+                <input type="radio" id="template" value="template" name="type">
+                <label for="template">From Template</label><br>
+
+                <div id="url_subform">
+                    <label for="image_link">Image URL:</label>
+                    <input id="image_link" type="url"><br>
+                </div>
+
+                <div id="file_subform">
+                    <label for="image_file">File:</label>
+                    <input id="image_file" type="file" accept="image/png, image/jpeg, image/gif, image/webp, image/tiff, image/svg+xml"><br>
+                </div>
+
+                <div id="template_subform">
+                    <label for="image_template">Template:</label>
+                    <select name="image_template" id="image_template">
+                        <option disabled selected hidden>Select an option...</option>
+                        <optgroup label="Builtin Templates"></optgroup>
+                        <optgroup label="User Templates"></optgroup>
+                    </select>
+                </div>
+
+                <div id="submit_button">
+                    <input type="submit" id="submit" value="Start">
+                </div>
+            </form>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
