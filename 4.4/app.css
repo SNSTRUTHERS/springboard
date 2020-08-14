@@ -1,0 +1,116 @@
+body {
+    background: #dedede;
+    margin: 0;
+    font-size: 20px;
+}
+
+ul li button, form input[type="submit"] {
+    all: unset;
+    cursor: pointer;
+
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 12px;
+    height: 12px;
+
+    margin: 0em 0.75em 0em 1.25em;
+    padding: 0 0.5em;
+
+    border-radius: 12px;
+}
+
+/* TODO LIST STYLES */
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    list-style-type: none;
+
+    padding: 0.75em 0em;
+}
+
+ul li.done {
+    text-decoration: line-through;
+}
+
+ul li:nth-child(2n) {
+    background: #ffffff;
+}
+
+ul li:nth-child(2n):hover {
+    background: #efefef;
+}
+
+ul li:nth-child(2n):hover {
+    background: #e8e8e8;
+}
+
+ul li:nth-child(2n+1) {
+    background: #f8f8f8;
+}
+
+ul li:nth-child(2n+1):hover {
+    background: #e8e8e8;
+}
+
+ul li:nth-child(2n+1):active {
+    background: #e0e0e0;
+}
+
+ul li button {
+    background: #ff0000;
+}
+
+ul li button:hover {
+    background: #cf0000;
+}
+
+ul li button:active {
+    background: #af0000;
+}
+
+/* FORM STYLESHEET */
+
+form {
+    background: #c0c0c0;
+    padding: 0.75em 0em;
+    margin: 0;
+
+    overflow-x: hidden;
+
+    position: relative;
+}
+
+form input[type="text"] {
+    all: unset;
+    font: inherit;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    padding: 0.75em 0em;
+    padding-left: 3.8em;
+    width: 100%;
+}
+
+form input[type="text"]::placeholder {
+    color: #383838;
+}
+
+form input[type="submit"] {
+    background: #00ff00;
+}
+
+form input[type="submit"]:hover {
+    background: #00cf00;
+}
+
+form input[type="submit"]:active {
+    background: #00af00;
+}
