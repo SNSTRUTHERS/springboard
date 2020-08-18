@@ -8,7 +8,7 @@ Examples:
 
 */
 function doubleValues(arr){
-    var new_arr = Array();
+    let new_arr = Array();
     arr.forEach(num => new_arr.push(num * 2));
     return new_arr;
 }
@@ -23,7 +23,7 @@ Examples:
 
 */
 function onlyEvenValues(arr){
-    var new_arr = Array();
+    let new_arr = Array();
     arr.forEach(num => (num % 2 == 0) ? new_arr.push(num) : undefined);
     return new_arr;
 }
@@ -38,7 +38,7 @@ Examples:
 
 */
 function showFirstAndLast(arr){
-    var new_arr = Array();
+    let new_arr = Array();
     arr.forEach(str => new_arr.push(str[0] + str[str.length - 1]));
     return new_arr;
 }
@@ -62,7 +62,7 @@ Examples:
 
 */
 function addKeyAndValue(arr,key,value){
-    var new_arr = Array();
+    let new_arr = Array();
     arr.forEach(obj => {
         new_arr.push(obj);
         new_arr[new_arr.length - 1][key] = value;
@@ -83,7 +83,7 @@ Examples:
     vowelCount('I Am awesome and so are you') // {i: 1, a: 4, e: 3, o: 3, u: 1};
 */
 function vowelCount(str){
-    var obj = {};
+    let obj = {};
     Array.from(str.toLowerCase()).forEach(char => {
         if (['a', 'e', 'i', 'o', 'u'].indexOf(char) > -1) {
             if (!obj.hasOwnProperty(char))
@@ -220,7 +220,7 @@ Examples:
 */
 
 function removeVowels(str) {
-    var new_str = "";
+    let new_str = "";
     Array.from(str.toLowerCase())
         .filter(char => ['a', 'e', 'i', 'o', 'u'].indexOf(char) == -1)
         .forEach(char => new_str += char)
