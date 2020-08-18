@@ -1,0 +1,6 @@
+Hi! I'm Simon, and I'm an independent software developer looking for an
+opportunity where my expertise in C++ programming, front- and back-end web
+design, or game design can be utilized in a meaningful way. I'm a high-energy,
+optimistic, and fast-learning weirdo eager to contribute in a positive working
+environment. I would be honored if you would consider me for ${job.position}
+position.
