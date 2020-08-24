@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Movies</title>
+
+        <link rel="stylesheet" href="movies.css">
+    </head>
+
+    <body>
+        <div class="center" id="movie-form-container">
+            <form action="" id="movie-form">
+                <div>
+                    <label for="movie-title">Title</label>
+                    <input type="text" id="movie-title" value="" required>
+                    <br>
+
+                    <label for="movie-rating">Rating</label>
+                    <input type="number" id="movie-rating" value="" min="0" max="10" step="0.1" required>
+                    <label for="movie-rating">/ 10.0</label>
+                </div>
+
+                <input type="submit" value="Add">
+                <div id="movie-padding"></div>
+            </form>
+        </div>
+
+        <ul id="movie-list"></ul>
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="movies.js"></script>
+</html>
