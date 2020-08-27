@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="ie-edge">
+
+        <title>Giphy Party!</title>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+    </head>
+
+    <body class="bg-secondary">
+        <nav class="navbar navbar-dark bg-dark text-dark navbar-expand-lg justify-content-center">
+            <h1 class="navbar-brand display-1">GIPHY PARTY</h1>
+        </nav>
+
+        <div class="container mt-2">
+            <div class="row">
+                <form id="search" action="" class="col-12 col-md-9 input-group">
+                    <input id="search_term" type="text" class="form-control" placeholder="Enter a search term" aria-label="" required>
+                    <div class="input-group-append">
+                        <input type="submit" class="btn btn-dark" value="Search Giphy">
+                    </div>
+                </form>
+
+                <div class="col-8 col-md-3">
+                    <button class="btn btn-danger btn-block" id="rm_images">Remove Images</button>
+                </div>
+            </div>
+            
+            <div id="images" class="row mt-3 align-items-center"></div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.js"></script>
+        <script src="app.js"></script>
+    </body>
+</html>
