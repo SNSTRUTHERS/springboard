@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python -m doctest */*.py
+python -m doctest $* */*.py
