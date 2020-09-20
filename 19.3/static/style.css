@@ -1,0 +1,14 @@
+:root {
+    margin: 0;
+    line-height: 1.15em;
+}
+
+.flash {
+    display: block;
+
+    margin: 16px;
+    padding: 16px;
+
+    background: #ff8080;
+    border-radius: 10px;
+}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for flash in get_flashed_messages() %}
+        <p class="flash">{{flash}}</p>
+    {% endfor %}
+
+    <h1>Survey Complete!</h1>
+    <p>Thank you for completing our survey.</p>
+{% endblock content %}
