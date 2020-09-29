@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% set scripts = ["/static/axios.min.js", "/static/script.js"] %}
+
+{% block content %}
+    <div id="timer"></div>
+
+    <form action="" id="word_form">
+        <label for="word">Word:</label>
+        <input type="text" id="word" name="word">
+        <input type="submit" value="Check">
+        <button id="new_game">New Game</button>
+    </form>
+
+    <p id="score">Score: 0</p>
+    <p id="highscore">Highscore: 0</p>
+
+    <div class="board hidden" id="board">
+        {% for row in board %}
+            {% for cell in row %}
+                <div>{{cell}}</div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock content %}

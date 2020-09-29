@@ -1,0 +1,35 @@
+.board {
+    display: grid;
+
+    grid-template-columns: repeat(5, 15vh);
+    grid-template-rows: repeat(5, 15vh);
+
+    width: auto;
+    margin: auto;
+}
+
+.board > div {
+    font-size: 11.5vh;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.board.hidden > div {
+    background: black;
+    content: "";
+}
+
+#timer {
+    position: absolute;
+    width: 0;
+    height: 100vh;
+    background: #e0e0e0;
+    z-index: -1;
+
+    margin-left: -8px;
+    margin-top: -8px;
+    margin-right: 0;
+    margin-bottom: 0;
+}

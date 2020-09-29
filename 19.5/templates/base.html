@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Boggle</title>
+        <link rel="stylesheet" type="text/css" href="/static/style.css">
+        {% block header %}{% endblock header %}
+    </head>
+
+    <body>
+        {% block content %}{% endblock content %}
+    </body>
+
+    {% for script in scripts %}
+        <script src="{{script}}"></script>
+    {% endfor %}
+</html>
