@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% set title = "Currency Exchange Rates" %}
+
+{% block content %}
+    {% for message in get_flashed_messages(category_filter=["error"]) %}
+        <div class="error">{{message}}</div>
+    {% endfor %}
+
+    <main>
+        <div>
+            <h1>Currency Conversion Tool</h1>
+
+            <form method="POST" action="/">
+                <label for="from">Convert from:</label>
+                <input type="text" id="from" name="from">
+                <br>
+
+                <label for="to">To:</label>
+                <input type="text" id="to" name="to">
+                <br>
+
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" min="0" step="0.01">
+                <br>
+
+                <input type="submit" value="Convert">
+            </form>
+
+            
+            {% for message in get_flashed_messages(category_filter=["value"]) %}
+                <div class="value">{{message}}</div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock content %}
