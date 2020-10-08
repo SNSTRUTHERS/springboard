@@ -14,7 +14,7 @@ CREATE DATABASE craigslist;
 
 CREATE TABLE regions (
     id SERIAL PRIMARY KEY,
-    name TEXT NOTNULL       -- region name
+    name TEXT NOT NULL      -- region name
 );
 
 CREATE TABLE users (
@@ -25,7 +25,7 @@ CREATE TABLE users (
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    name TEXT NOTNULL
+    name TEXT NOT NULL
 );
 
 CREATE TABLE posts (
