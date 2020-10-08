@@ -39,5 +39,5 @@ CREATE TABLE visits (
 CREATE TABLE diagnoses (
     id SERIAL PRIMARY KEY,
     visit_id INTEGER REFERENCES visits, -- which visit the diagnosis was given
-    ailment TEXT NOTNULL                -- the disease/ailment name
+    ailment TEXT NOT NULL               -- the disease/ailment name
 );
