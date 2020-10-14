@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <title>Blogly - {{user.full_name}}</title>
+{% endblock header %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col col-3">
+                <img src="{{user.image_url}}" class="img-fluid">
+            </div>
+
+            <div class="col col-9">
+                <h1>{{user.full_name}}</h1>
+
+                <div class="row">
+                    <div class="col col-3">
+                        <a href="/users/{{user.id}}/edit">
+                            <button class="btn btn-primary btn-block">Edit</button>
+                        </a>
+                    </div>
+                    
+                    <div class="col col-3">
+                        <form method="POST" action="/users/{{user.id}}/delete">
+                            <button class="btn btn-danger btn-block">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
