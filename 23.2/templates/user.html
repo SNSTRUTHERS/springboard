@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <title>Blogly - {{user.full_name}}</title>
+{% endblock header %}
+
+{% block content %}
+    <div class="container">
+        {% include "errors.html" %}
+
+        <div class="row">
+            <div class="col col-3">
+                <img src="{{user.image_url}}" class="img-fluid">
+            </div>
+
+            <div class="col col-9">
+                <h1>{{user.full_name}}</h1>
+
+                <a href="/users/{{user.id}}/edit" class="float-left" style="margin-right: 0.5em;">
+                        <button class="btn btn-primary">Edit</button></a>
+                <form method="POST" action="/users/{{user.id}}/delete" class="float-left">
+                    
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </form><br><br>
+
+                <h2>Posts</h2>
+                {% if user.posts|length > 0 %}
+                    <ul>
+                    {% for post in user.posts %}
+                        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                     <p style="margin-left: 2em;">
+                        <small><i>This user hasn't posted anything!</i></small>
+                    </p>
+                {% endif %}
+                <a href="/users/{{user.id}}/posts/new">
+                    <button class="btn btn-primary">New Post</button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

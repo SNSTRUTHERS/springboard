@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <title>Blogly - {{post.title}}</title>
+{% endblock header %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{post.title}}</h1>
+        <p><small><i>
+            by <a href="/users/{{post.user_id}}">{{post.user.full_name}}</a>
+        </small></i><br>
+        <small><i>
+            created <b>{{post.created_timestamp}}</b>; last updated <b>{{post.updated_timestamp}}</b>
+        </small></i></p>
+
+        <hr>
+            <div>{{post.content}}</div>
+        <hr>
+
+        <a href="/posts/{{post.id}}/edit" class="float-left" style="margin-right: 0.5em;">
+            <button class="btn btn-small btn-primary">Edit</button></a>
+        <form method="POST" action="/posts/{{post.id}}/delete" class="float-left">
+            <input type="submit" class="btn btn-small btn-danger" value="Delete">
+        </form><br>
+    </div>
+{% endblock content %}
