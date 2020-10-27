@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <title>Blogly - Homepage</title>
+{% endblock header %}
+
+{% block content %}
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid text-center">
+            <h1 class="display-4">Blogly</h1>
+            <p class="lead">What people are saying.</p>
+        </div>
+
+        <h1>Latest Posts</h1>
+        <hr>
+
+        {% for post in posts %}
+            <h2><a href="/posts/{{post.id}}">{{post.title}}</a></h2>
+            
+            <p class="ml-4">
+                <span>by <a href="/users/{{post.user_id}}">{{post.user.full_name}}</a></span>
+                <span>on <i>{{post.created_timestamp}}</i></span>
+            </p>
+
+            <p class="ml-4">
+                {% if post.tags|length > 0 %}
+                    <b>Tags:</b>
+                    {% for tag in post.tags %}
+                        <a href="/tags/{{tag.id}}" class="badge badge-primary"><i>
+                            {{tag.name}}
+                        </i></a>
+                    {% endfor %}
+                {% else %}
+                    <i>No tags associated with this post.</i>
+                {% endif %}
+            </p>
+        {% endfor %}
+    </div>
+{% endblock content %}

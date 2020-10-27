@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block header %}
+    {% if tag is defined %}
+        <title>Blogly - Editing {{tag.name}}</title>
+    {% else %}
+        <title>Blogly - New Tag</title>
+    {% endif %}
+{% endblock header %}
+
+{% block content %}
+    <div class="container">
+        {% include "errors.html" %}
+        
+        {% if tag is defined %}
+            <h1>Edit a tag</h1>
+        {% else %}
+            <h1>Create a tag</h1>
+        {% endif %}
+
+        <form
+            method="POST"
+        {% if tag is defined %}
+            action="/tags/{{tag.id}}/edit"
+        {% else %}
+            action="/tags/new"
+        {% endif %}
+        >
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input
+                    type="text"
+                    id="name"
+                {% if tag is defined %}
+                    value="{{tag.name}}"
+                {% endif %}
+                    name="name"
+                    placeholder="Enter a name"
+                    class="form-control"
+                    required
+                >
+            </div>
+
+            <input
+                type="submit"
+                class="btn btn-success float-right"
+            {% if user is defined %}
+                value="Save"
+            {% else %}
+                value="Add"
+            {% endif %}
+            >
+            
+            <a href="#" onclick="history.go(-1)" class="float-right" style="margin-right: 8px;">
+                <button class="btn btn-outline-primary">Cancel</button>
+            </a>
+        </form>
+    </div>
+{% endblock content %}

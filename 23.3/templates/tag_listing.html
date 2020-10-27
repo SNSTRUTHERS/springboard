@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <title>Blogly - Tags</title>
+{% endblock header %}
+
+{% block content %}
+    <div class="container">
+        {% include "errors.html" %}
+
+        <h1>Tags</h1>
+
+        {% if tags|length > 0 %}
+            <ul>
+            {% for tag in tags %}
+                <li><a href="/tags/{{tag.id}}">{{tag.name}}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="ml-4"><i>No tags have been registered.</i></p>
+        {% endif %}
+
+        <a href="/tags/new"><button class="btn btn-secondary">Create tag</button></a>
+    </div>
+{% endblock content %}

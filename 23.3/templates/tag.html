@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <title>Blogly - {{tag.name}}</title>
+{% endblock header %}
+
+{% block content %}
+    <div class="container">
+        {% include "errors.html" %}
+
+        <h1>{{tag.name}}</h1>
+
+        {% if tag.posts|length > 0 %}
+            <ul>
+            {% for post in tag.posts %}
+                <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="ml-4">
+                <small><i>No posts are associated with this tag!</i></small>
+            </p>
+        {% endif %}
+
+        <a href="/tags/{{tag.id}}/edit" class="float-left" style="margin-right: 0.5em;">
+            <button class="btn btn-small btn-primary">Edit</button></a>
+        <form method="POST" action="/tags/{{tag.id}}/delete" class="float-left">
+            <input type="submit" class="btn btn-small btn-danger" value="Delete">
+        </form><br>
+    </div>
+{% endblock content %}
