@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block header %}
+<title>Pet Adoption Agency- Editing {{pet.name}}</title>
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+    <h1>{{pet.name}}</h1>
+
+    {% if pet.photo_url %}
+    <img class="img-fluid" src="{{pet.photo_url}}">
+    {% endif %}
+
+    <h2>Update</h2>
+
+    <form method="POST">
+        {% include "form.html" %}
+        <input type="submit" class="btn btn-primary" value="Add">
+    </form>
+</div>
+{% endblock content %}
