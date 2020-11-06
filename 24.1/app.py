@@ -69,7 +69,7 @@ def edit_pet_pages(pet_id: int):
 if __name__ == "__main__":
     if len(sys.argv) >= 3:
         app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri(
-            sys.argv[3] if len(sys.argv) > 3 else "blogly",
+            sys.argv[3] if len(sys.argv) > 3 else "adopt",
             sys.argv[1],
             sys.argv[2]
         )
