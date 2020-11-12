@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block header %}
+<title>Feedback - Register</title>
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+    <h1>Feedback</h1><hr>
+    <h2>Register</h2>
+
+    <p class="lead">Already have an account? <a href="/login">Log in</a>!</p>
+
+    <form method="POST">
+        {% include "form.html" %}
+
+        <button class="btn btn-primary">Create Account</button>
+    </form>
+</div>
+{% endblock content %}

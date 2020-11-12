@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block header %}
+<title>Feedback - {{user.full_name}}</title>
+{% endblock header %}
+
+{% block content %}
+    {% include "nav.html" %}
+
+    <div class="container">
+        <h1>{{user.full_name}}</h1>
+        <p class="ml-4"><i>@{{user.username}}</i></p>
+
+        <h2>Feedback</h2>
+        {% if user.feedback|length > 0 %}
+            <ul>
+            {% for feedback in user.feedback %}
+                <li>
+                    <span class="h4">{{ feedback.title }}</span><br>
+
+                    {{ feedback.content }}<br>
+                    <small> from
+                        <i><a href="/users/{{ feedback.from_username }}"
+                        >@{{ feedback.from_username }}</a></i>
+                    </small>
+                    <br>
+
+                {% if feedback.from_username == session["username"] %}
+                    <a
+                        class="btn btn-sm btn-primary mt-1 float-left"
+                        href="/feedback/{{ feedback.id }}/update"
+                    >Edit</a>
+                {% endif %}
+                {% if feedback.to_username == session["username"] or
+                    feedback.from_username == session["username"]
+                 %}
+                    <form
+                        method="POST"
+                        action="/feedback/{{ feedback.id }}/delete"
+                    {% if feedback.from_username == session["username"] %}
+                        class="float-left ml-1"
+                    {% else %}
+                        class="float-left"
+                    {% endif %}
+                    >
+                        {{ form.hidden_tag() }}
+
+                        <button class="btn btn-sm btn-danger mt-1">Delete</button>
+                    </form>
+                {% endif %}<br>
+                
+                </li><br>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <small class="ml-4"><i>No feedback.</i></small>
+        {% endif %}
+        
+        <p class="mt-2"><a href="/users/{{ user.username }}/feedback/add" class="btn btn-primary">
+            Add Feedback
+        </a></p>
+
+        {% if user.username == session["username"] %}
+            <form action="/users/{{ user.username }}/delete" method="POST">
+                <button class="btn btn-danger btn-sm">Delete User</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock content %}

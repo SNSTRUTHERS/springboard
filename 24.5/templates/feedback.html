@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block header %}
+    {% if feedback is defined %}
+        <title>Feeback - Editing Feedback</title>
+    {% else %}
+        <title>Feedback - New Feedback</title>
+    {% endif %}
+{% endblock header %}
+
+{% block content %}
+    {% include "nav.html" %}
+
+    <div class="container">
+        {% if feedback is defined %}
+            <h1>Edit Feedback</h1>
+        {% else %}
+            <h1>Add Feedback for
+                <i><a href="/users/{{ fusername }}">@{{ fusername }}</a></i>
+            </h1>
+        {% endif %}
+
+        <form
+            method="POST"
+        {% if feedback is defined %}
+            action="/feedback/{{ feedback.id }}/update"
+        {% endif %}
+        >
+            {% include "form.html" %}
+
+            <button class="btn btn-primary">
+            {% if feedback is defined %}
+                Edit
+            {% else %}
+                Add
+            {% endif %}
+            </button>
+        </form>
+    </div>
+{% endblock content %}
