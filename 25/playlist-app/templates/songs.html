@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Songs</h1>
+
+<div class="list-group">
+{% for song in songs %}
+    <a
+        class="list-group-item list-group-item-action"
+        href="/songs/{{ song.id }}"
+    >{{ song.title }}</a>
+{% endfor %}
+</div><br>
+
+<p><a class="btn btn-primary" href="/songs/add">Add a song</a></p>
+
+
+{% endblock %}
