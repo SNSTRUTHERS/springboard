@@ -97,6 +97,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
+        print(form.data, form.password.data)
         user = User.authenticate(form.username.data,
                                  form.password.data)
 
@@ -140,7 +141,7 @@ def list_users():
 
 
 @app.route('/users/<int:user_id>')
-def users_show(user_id):
+def users_show(user_id: int):
     """Show user profile."""
 
     user = User.query.get_or_404(user_id)
@@ -159,7 +160,7 @@ def users_show(user_id):
 
 
 @app.route('/users/<int:user_id>/following')
-def show_following(user_id):
+def show_following(user_id: int):
     """Show list of people this user is following."""
 
     if not g.user:
@@ -171,7 +172,7 @@ def show_following(user_id):
 
 
 @app.route('/users/<int:user_id>/followers')
-def users_followers(user_id):
+def users_followers(user_id: int):
     """Show list of followers of this user."""
 
     if not g.user:
@@ -183,7 +184,7 @@ def users_followers(user_id):
 
 
 @app.route('/users/follow/<int:follow_id>', methods=['POST'])
-def add_follow(follow_id):
+def add_follow(follow_id: int):
     """Add a follow for the currently-logged-in user."""
 
     if not g.user:
@@ -210,6 +211,18 @@ def stop_following(follow_id):
     db.session.commit()
 
     return redirect(f"/users/{g.user.id}/following")
+
+
+@app.route('/users/<int:user_id>/likes', methods=["GET"])
+def users_likes(user_id: int):
+    """Show the liked posts of a given user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    user = User.query.get_or_404(user_id)
+    return render_template('/users/likes.html', user=user, likes=user.likes)
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
@@ -279,15 +292,37 @@ def messages_add():
 
 
 @app.route('/messages/<int:message_id>', methods=["GET"])
-def messages_show(message_id):
+def messages_show(message_id: int):
     """Show a message."""
 
     msg = Message.query.get(message_id)
     return render_template('messages/show.html', message=msg)
 
 
+@app.route('/messages/<int:message_id>/like', methods=["POST"])
+def messages_like(message_id: int):
+    """Toggles the like status for a given message."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    message = Message.query.get_or_404(message_id)
+    if message.user_id == g.user.id:
+        return abort(403)
+    
+    if message in g.user.likes:
+        g.user.likes = [ like for like in g.user.likes if like != message ]
+    else:
+        g.user.likes.append(message)
+    
+    db.session.commit()
+
+    return redirect("/")
+
+
 @app.route('/messages/<int:message_id>/delete', methods=["POST"])
-def messages_destroy(message_id):
+def messages_destroy(message_id: int):
     """Delete a message."""
 
     if not g.user:
@@ -327,11 +362,25 @@ def homepage():
         return render_template('home-anon.html')
 
 
+@app.errorhandler(401)
+def error401(error):
+    """Handle 401 errors"""
+
+    return render_template('error.html', code=401, text="UNAUTHORIZED"), 401
+
+
+@app.errorhandler(403)
+def error403(error):
+    """Handle 403 errors"""
+
+    return render_template('error.html', code=403, text="FORBIDDEN"), 403
+
+
 @app.errorhandler(404)
 def error404(error):
     """Handle 404 errors"""
 
-    return render_template('errors/404.html'), 404
+    return render_template('error.html', code=404, text="NOT FOUND"), 404
 
 
 # == TURN OFF FLASK CACHING ====================================================================== #
