@@ -8,14 +8,14 @@ function starOutGrid(grid) {
     const cols = new Set();
 
     grid.forEach((row) => {
-        const index = row.indexOf('*');
-        if (index >= 0) {
+        if (row.indexOf('*') >= 0) {
             // replace all columns with *
             row.forEach((unused, index) => {
-                row[index] = '*';
+                if (row[index] === '*')
+                    cols.add(index);
+                else
+                    row[index] = '*';
             });
-
-            cols.add(index);
         }
     });
 
