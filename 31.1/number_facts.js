@@ -22,6 +22,6 @@ Promise.all(
     Array.from({ length: 4 }, () => fetch(`${BASE_URL}/${FAVORITE_NUMBER}?json`))
 ).then((requests) => {
     requests.forEach((request) => request.json().then(({text}) => {
-        cursor.insertAdjacentText('beforebegin', '   - ' + text + '\n');
+        CURSOR.insertAdjacentText('beforebegin', '   - ' + text + '\n');
     }))
 });
