@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <title>Deck of Cards</title>
+        <link rel="stylesheet" href="/style.css">
+        
+        <style>
+#draw {
+    cursor: pointer;
+    display: inline-block;
+}
+
+#draw::after {
+    content: "CLIK FOR CARD :^) ";
+    color: white;
+}
+
+#draw:not(.disabled):hover::after {
+    font-weight: bold;
+}
+#draw:not(.disabled):active::after {
+    content: "CLIK FOR CARD :^D ";
+}
+
+#draw.disabled {
+    cursor: auto;
+}
+#draw.disabled::after {
+    color: grey;
+    content: "OUT OF CARDS :^( ";
+}
+
+#cards {
+    margin-left: 40%;
+    margin-top: 200px;
+
+    position: relative;
+
+    width: 100%;
+}
+
+#cards > img {
+    position: absolute;
+}
+        </style>
+    </head>
+
+    <body>
+<span id="draw"></span><span id="cursor"></span>
+
+<div id="cards" style="white-space: normal;"></div>
+    </body>
+
+    <script src="deck_of_cards.js"></script>
+</html>

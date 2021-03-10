@@ -66,13 +66,17 @@
 }
 
 body {
-    margin: 20px;
+    margin: 0 20px;
     background: black;
     color: white;
 
     word-wrap: break-word;
     overflow-x: hidden;
     overflow-y: auto;
+
+    position: relative;
+
+    white-space: pre;
 }
 
 a:link {
@@ -83,6 +87,29 @@ a:visited {
     color: #a764a7;
 }
 
+.center {
+    text-align: center;
+    white-space: normal;
+}
+
+.line {
+    border-right: 1px solid grey;
+    display: block;
+
+    height: 100%;
+    
+    position: absolute;
+
+    z-index: -1;
+}
+.line::before {
+    content:
+        "________________________________________________________________________________"
+        "____________________"
+    ;
+    color: #00000000;
+}
+
 /* -- BLINKING CURSOR --------------------------------------------------------------------------- */
 
 @keyframes blinking {
@@ -91,14 +118,16 @@ a:visited {
     100% { background: white; }
 }
 
-body::after {
-    content: " ";
-    white-space: pre;
-
+#cursor {
     animation-name: blinking;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-timing-function: step-end;
+
+    display: inline-block;
+
+    white-space: pre;
 }
-
-
+#cursor::after {
+    content: " ";
+}
