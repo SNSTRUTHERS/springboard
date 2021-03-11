@@ -1,0 +1,14 @@
+{
+    "name": "simcat",
+    "version": "1.0.0",
+    "description": "SpringBoard assignment 31.3 - cat (ish)",
+    "main": "index.js",
+    "scripts": {
+        "test": "node step1.js test.txt"
+    },
+    "author": "Simon Struthers",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.21.1"
+    }
+}
