@@ -1,0 +1,14 @@
+{
+  "name": "markov_machine",
+  "version": "1.0.0",
+  "description": "31.4 exercise",
+  "main": "markov.js",
+  "scripts": {
+    "test": "node markov.js 2 eggs.txt"
+  },
+  "author": "Simon Struthers",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
