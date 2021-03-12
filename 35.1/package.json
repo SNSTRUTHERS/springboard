@@ -1,0 +1,21 @@
+{
+  "name": "35.1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
+  }
+}
