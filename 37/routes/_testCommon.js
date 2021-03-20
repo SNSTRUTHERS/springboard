@@ -13,6 +13,10 @@ const jobIdMap = new Map();
 
 async function commonBeforeAll() {
     // noinspection SqlWithoutWhere
+    await db.query("DELETE FROM applications");
+    // noinspection SqlWithoutWhere
+    await db.query("DELETE FROM jobs");
+    // noinspection SqlWithoutWhere
     await db.query("DELETE FROM users");
     // noinspection SqlWithoutWhere
     await db.query("DELETE FROM companies");
@@ -66,29 +70,37 @@ async function commonBeforeAll() {
         isAdmin: true,
     });
 
-    let { id: id1 } = await Job.create({
-        title: "J1",
-        salary: 100000,
-        equity: "0.25",
-        companyHandle: "c1"
-    });
+    const [ { id: id1 }, { id: id2 }, { id: id3 } ] = await Promise.all([
+        Job.create({
+            title: "J1",
+            salary: 100000,
+            equity: "0.25",
+            companyHandle: "c1"
+        }),
+        Job.create({
+            title: "J2",
+            salary: 200000,
+            equity: "0.125",
+            companyHandle: "c1"
+        }),
+        Job.create({
+            title: "J3",
+            salary: 300000,
+            equity: "0",
+            companyHandle: "c2"
+        })
+    ]);
     jobIdMap.set("J1", id1);
-
-    let { id: id2 } = await Job.create({
-        title: "J2",
-        salary: 200000,
-        equity: "0.125",
-        companyHandle: "c1"
-    });
     jobIdMap.set("J2", id2);
-
-    let { id: id3 } = await Job.create({
-        title: "J3",
-        salary: 300000,
-        equity: "0",
-        companyHandle: "c2"
-    });
     jobIdMap.set("J3", id3);
+
+    await Promise.all([
+        User.applyForJob("u1", id1, "interested"),
+        User.applyForJob("u1", id2, "interested"),
+        User.applyForJob("u1", id3, "applied"),
+        User.applyForJob("u2", id1, "applied"),
+        User.applyForJob("u2", id2, "rejected")
+    ]);
 }
 
 async function commonBeforeEach() {

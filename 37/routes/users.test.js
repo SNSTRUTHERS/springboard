@@ -14,6 +14,7 @@ const {
     userToken,
     otherUserToken,
     adminToken,
+    jobIdMap,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -21,7 +22,7 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-/************************************** POST /users */
+// == POST /users =============================================================================== //
 
 describe("POST /users", () => {
     test("works for admins: create non-admin", async () => {
@@ -129,7 +130,7 @@ describe("POST /users", () => {
     });
 });
 
-/************************************** GET /users */
+// == GET /users ================================================================================ //
 
 describe("GET /users", () => {
     test("works for admins", async () => {
@@ -194,7 +195,7 @@ describe("GET /users", () => {
     });
 });
 
-/************************************** GET /users/:username */
+// == GET /users/:username ====================================================================== //
 
 describe("GET /users/:username", () => {
     test("works for admins", async () => {
@@ -210,6 +211,26 @@ describe("GET /users/:username", () => {
                 lastName: "U1L",
                 email: "user1@user.com",
                 isAdmin: false,
+                jobs: [
+                    {
+                        id: jobIdMap.get("J1"),
+                        title: "J1",
+                        companyHandle: 'c1',
+                        status: "interested"
+                    },
+                    {
+                        id: jobIdMap.get("J2"),
+                        title: "J2",
+                        companyHandle: 'c1',
+                        status: "interested"
+                    },
+                    {
+                        id: jobIdMap.get("J3"),
+                        title: "J3",
+                        companyHandle: 'c2',
+                        status: "applied"
+                    },
+                ],
             },
         });
     });
@@ -227,6 +248,44 @@ describe("GET /users/:username", () => {
                 lastName: "U1L",
                 email: "user1@user.com",
                 isAdmin: false,
+                jobs: [
+                    {
+                        id: jobIdMap.get("J1"),
+                        title: "J1",
+                        companyHandle: 'c1',
+                        status: "interested"
+                    },
+                    {
+                        id: jobIdMap.get("J2"),
+                        title: "J2",
+                        companyHandle: 'c1',
+                        status: "interested"
+                    },
+                    {
+                        id: jobIdMap.get("J3"),
+                        title: "J3",
+                        companyHandle: 'c2',
+                        status: "applied"
+                    },
+                ],
+            },
+        });
+    });
+
+    test("works for user with no job applications/interests", async () => {
+        const resp = await request(app).get(`/users/u3`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.body).toEqual({
+            user: {
+                username: "u3",
+                firstName: "U3F",
+                lastName: "U3L",
+                email: "user3@user.com",
+                isAdmin: true,
+                jobs: [],
             },
         });
     });
@@ -256,7 +315,7 @@ describe("GET /users/:username", () => {
     });
 });
 
-/************************************** PATCH /users/:username */
+// == PATCH /users/:username ==================================================================== //
 
 describe("PATCH /users/:username", () => {
     test("works for admins", async () => {
@@ -360,7 +419,7 @@ describe("PATCH /users/:username", () => {
     });
 });
 
-/************************************** DELETE /users/:username */
+// == DELETE /users/:username =================================================================== //
 
 describe("DELETE /users/:username", () => {
     test("works for admins", async () => {
@@ -409,6 +468,246 @@ describe("DELETE /users/:username", () => {
             `Bearer ${adminToken}`
         );
         
+        expect(resp.statusCode).toEqual(404);
+    });
+});
+
+// == POST /users/:username/jobs/:id ============================================================ //
+
+describe("POST /users/:username/jobs/:id", () => {
+    test("works for admins", async () => {
+        let resp = await request(app).post(`/users/u3/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        ).send({
+            status: "applied"
+        });
+
+        expect(resp.body).toEqual({ applied: jobIdMap.get("J1") });
+
+        resp = await request(app).get(`/users/u3`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.body.user.jobs).toContainEqual({
+            id: jobIdMap.get("J1"),
+            title: "J1",
+            companyHandle: 'c1',
+            status: "applied",
+        });
+    });
+
+    test("works for given user", async () => {
+        let resp = await request(app).post(`/users/u2/jobs/${jobIdMap.get("J3")}`).set(
+            "authorization",
+            `Bearer ${otherUserToken}`
+        ).send({
+            status: "interested"
+        });
+
+        expect(resp.body).toEqual({ interested: jobIdMap.get("J3") });
+
+        resp = await request(app).get(`/users/u2`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.body.user.jobs).toContainEqual({
+            id: jobIdMap.get("J3"),
+            title: "J3",
+            companyHandle: 'c2',
+            status: "interested",
+        });
+    });
+
+    test("unauth for anon", async () => {
+        const resp = await request(app).post(`/users/u3/jobs/${jobIdMap.get("J3")}`).send({
+            status: "interested"
+        });
+
+        expect(resp.statusCode).toEqual(401);
+    });
+
+    test("unauth for non-given user", async () => {
+        const resp = await request(app).post(`/users/u3/jobs/${jobIdMap.get("J3")}`).send({
+            status: "interested"
+        }).set(
+            "authorization",
+            `Bearer ${userToken}`
+        );
+
+        expect(resp.statusCode).toEqual(401);
+    });
+
+    test("bad request if missing data", async () => {
+        const resp = await request(app).post(`/users/u3/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.statusCode).toEqual(400);
+    });
+
+    test("bad request if invalid data", async () => {
+        const resp = await request(app).post(`/users/u3/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        ).send({
+            status: "heck yeah"
+        });
+
+        expect(resp.statusCode).toEqual(400);
+    });
+
+    test("bad request if dupe", async () => {
+        const resp = await request(app).post(`/users/u1/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        ).send({
+            status: "interested"
+        });
+
+        expect(resp.statusCode).toEqual(400);
+    });
+
+    test("not found if user not found", async () => {
+        const resp = await request(app).post(`/users/none/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        ).send({
+            status: "interested"
+        });
+
+        expect(resp.statusCode).toEqual(404);
+    });
+
+    test("not found if job not found", async () => {
+        const resp = await request(app).post(`/users/none/u1/999999`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        ).send({
+            status: "interested"
+        });
+
+        expect(resp.statusCode).toEqual(404);
+    });
+});
+
+// == DELETE /users/:username/jobs/:id ========================================================== //
+
+describe("DELETE /users/:username/jobs/:id", () => {
+    test("works for admins", async () => {
+        let resp = await request(app).delete(`/users/u1/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.body).toEqual({ deleted: jobIdMap.get("J1") });
+
+        resp = await request(app).get(`/users/u1`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.body.user.jobs).not.toContainEqual({
+            id: jobIdMap.get("J1"),
+            title: "J1",
+            companyHandle: 'c1',
+            status: "interested",
+        });
+    });
+
+    test("works for admins regardless of application status", async () => {
+        let resp = await request(app).delete(`/users/u1/jobs/${jobIdMap.get("J3")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.body).toEqual({ deleted: jobIdMap.get("J3") });
+
+        resp = await request(app).get(`/users/u1`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.body.user.jobs).not.toContainEqual({
+            id: jobIdMap.get("J3"),
+            title: "J3",
+            companyHandle: 'c2',
+            status: "applied",
+        });
+    });
+    
+    test("works for given user", async () => {
+        let resp = await request(app).delete(`/users/u1/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${userToken}`
+        );
+
+        expect(resp.body).toEqual({ deleted: jobIdMap.get("J1") });
+
+        resp = await request(app).get(`/users/u1`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.body.user.jobs).not.toContainEqual({
+            id: jobIdMap.get("J1"),
+            title: "J1",
+            companyHandle: 'c1',
+            status: "interested",
+        });
+    });
+
+    test("unauth for given user if application status isn't \"interested\"", async () => {
+        const resp = await request(app).delete(`/users/u1/jobs/${jobIdMap.get("J3")}`).set(
+            "authorization",
+            `Bearer ${userToken}`
+        );
+
+        expect(resp.statusCode).toEqual(401);
+    });
+
+    test("unauth for anon", async () => {
+        const resp = await request(app).delete(`/users/u1/jobs/${jobIdMap.get("J3")}`);
+
+        expect(resp.statusCode).toEqual(401);
+    });
+
+    test("unauth for non-given user", async () => {
+        const resp = await request(app).post(`/users/u1/jobs/${jobIdMap.get("J3")}`).set(
+            "authorization",
+            `Bearer ${otherUserToken}`
+        );
+
+        expect(resp.statusCode).toEqual(401);
+    });
+
+    test("not found if user not found", async () => {
+        const resp = await request(app).delete(`/users/none/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.statusCode).toEqual(404);
+    });
+
+    test("not found if job not found", async () => {
+        const resp = await request(app).delete(`/users/none/u1/999999`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
+        expect(resp.statusCode).toEqual(404);
+    });
+
+    test("not found if no application", async () => {
+        const resp = await request(app).delete(`/users/u3/jobs/${jobIdMap.get("J1")}`).set(
+            "authorization",
+            `Bearer ${adminToken}`
+        );
+
         expect(resp.statusCode).toEqual(404);
     });
 });

@@ -6,12 +6,12 @@
         "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 30
+            "maxLength": 75
         },
         "handle": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 20
+            "maxLength": 25
         },
         "description": {
             "type": "string"

@@ -12,6 +12,7 @@ const {
     commonBeforeEach,
     commonAfterEach,
     commonAfterAll,
+    jobIdMap,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -131,7 +132,7 @@ describe("findAll", () => {
 
 describe("get", () => {
     test("works", async () => {
-        let user = await User.get("u1");
+        const user = await User.get("u1");
 
         expect(user).toEqual({
             username: "u1",
@@ -139,6 +140,39 @@ describe("get", () => {
             lastName: "U1L",
             email: "u1@email.com",
             isAdmin: false,
+            jobs: [
+                {
+                    id: jobIdMap.get("J1"),
+                    title: "J1",
+                    companyHandle: 'c1',
+                    status: "interested"
+                },
+                {
+                    id: jobIdMap.get("J2"),
+                    title: "J2",
+                    companyHandle: 'c1',
+                    status: "applied"
+                },
+                {
+                    id: jobIdMap.get("J3"),
+                    title: "J3",
+                    companyHandle: 'c2',
+                    status: "rejected"
+                },
+            ],
+        });
+    });
+
+    test("works for user with no job applications", async () => {
+        const user = await User.get("u2");
+
+        expect(user).toEqual({
+            username: "u2",
+            firstName: "U2F",
+            lastName: "U2L",
+            email: "u2@email.com",
+            isAdmin: false,
+            jobs: [],
         });
     });
 
@@ -163,20 +197,20 @@ describe("update", () => {
     };
 
     test("works", async () => {
-        let job = await User.update("u1", updateData);
+        const user = await User.update("u1", updateData);
         
-        expect(job).toEqual({
+        expect(user).toEqual({
             username: "u1",
             ...updateData,
         });
     });
 
     test("works: set password", async () => {
-        let job = await User.update("u1", {
+        const user = await User.update("u1", {
             password: "new",
         });
 
-        expect(job).toEqual({
+        expect(user).toEqual({
             username: "u1",
             firstName: "U1F",
             lastName: "U1L",
@@ -226,6 +260,157 @@ describe("remove", () => {
     test("not found if no such user", async () => {
         try {
             await User.remove("nope");
+            fail();
+        } catch (err) {
+            expect(err instanceof NotFoundError).toBeTruthy();
+        }
+    });
+});
+
+// == APPLY FOR JOB ============================================================================= //
+
+describe("apply for job", () => {
+    test("works", async () => {
+        await Promise.all([
+            User.applyForJob("u2", jobIdMap.get("J1"), "interested"),
+            User.applyForJob("u2", jobIdMap.get("J2"), "applied"),
+            User.applyForJob("u2", jobIdMap.get("J3"), "accepted"),
+        ]);
+
+        const { jobs } = await User.get("u2");
+        expect(jobs).toEqual([
+            {
+                id: jobIdMap.get("J1"),
+                title: "J1",
+                companyHandle: 'c1',
+                status: "interested"
+            },
+            {
+                id: jobIdMap.get("J2"),
+                title: "J2",
+                companyHandle: 'c1',
+                status: "applied"
+            },
+            {
+                id: jobIdMap.get("J3"),
+                title: "J3",
+                companyHandle: 'c2',
+                status: "accepted"
+            },
+        ]);
+    });
+
+    test("bad request if invalid status", async () => {
+        try {
+            await User.applyForJob("u2", jobIdMap.get("J1"), "heck yeah!");
+            fail();
+        } catch (err) {
+            expect(err instanceof BadRequestError).toBeTruthy();
+        }
+    });
+
+    test("bad request on duplicate username-job id combo", async () => {
+        try {
+            await User.applyForJob("u2", jobIdMap.get("J1"), "accepted");
+            await User.applyForJob("u2", jobIdMap.get("J1"), "accepted");
+            fail();
+        } catch (err) {
+            expect(err instanceof BadRequestError).toBeTruthy();
+        }
+    });
+
+    test("not found if no such user", async () => {
+        try {
+            await User.applyForJob("none", jobIdMap.get("J1"), "interested");
+            fail();
+        } catch (err) {
+            expect(err instanceof NotFoundError).toBeTruthy();
+        }
+    });
+
+    test("not found if no such job", async () => {
+        try {
+            await User.applyForJob("u1", 999999, "interested");
+            fail();
+        } catch (err) {
+            expect(err instanceof NotFoundError).toBeTruthy();
+        }
+    });
+});
+
+// == REMOVE JOB APPLICATION/INTEREST =========================================================== //
+
+describe("remove job", () => {
+    test("removing job interests: works", async () => {
+        await User.removeJob("u1", jobIdMap.get("J1"));
+
+        const { jobs } = await User.get("u1");
+        expect(jobs).toEqual([
+            {
+                id: jobIdMap.get("J2"),
+                title: "J2",
+                companyHandle: 'c1',
+                status: "applied"
+            },
+            {
+                id: jobIdMap.get("J3"),
+                title: "J3",
+                companyHandle: 'c2',
+                status: "rejected"
+            },
+        ]);
+    });
+    
+    test("removing job applications as admin: works", async () => {
+        await User.removeJob("u1", jobIdMap.get("J3"), true);
+
+        const { jobs } = await User.get("u1");
+        expect(jobs).toEqual([
+            {
+                id: jobIdMap.get("J1"),
+                title: "J1",
+                companyHandle: 'c1',
+                status: "interested"
+            },
+            {
+                id: jobIdMap.get("J2"),
+                title: "J2",
+                companyHandle: 'c1',
+                status: "applied"
+            },
+        ]);
+    });
+
+    test("unauthorized if not admin and application status isn't \"interested\"", async () => {
+        try {
+            await User.removeJob("u1", jobIdMap.get("J2"), false);
+            fail();
+        } catch (err) {
+            expect(err instanceof UnauthorizedError).toBeTruthy();
+        }
+    });
+
+    test("not found if no such user", async () => {
+        try {
+            await User.removeJob("none", jobIdMap.get("J1"), "interested");
+            fail();
+        } catch (err) {
+            expect(err instanceof NotFoundError).toBeTruthy();
+        }
+    });
+
+    test("not found if no such job", async () => {
+        try {
+            await User.removeJob("u1", 999999, "interested");
+            fail();
+        } catch (err) {
+            expect(err instanceof NotFoundError).toBeTruthy();
+        }
+    });
+
+    test("not found if no such application", async () => {
+        try {
+            await User.removeJob("u2", jobIdMap.get("J1"), "interested");
             fail();
         } catch (err) {
             expect(err instanceof NotFoundError).toBeTruthy();

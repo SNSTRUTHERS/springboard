@@ -113,25 +113,113 @@ class User {
     /** Given a username, return data about user.
      *
      * Returns { username, first_name, last_name, is_admin, jobs }
-     *   where jobs is { id, title, company_handle, company_name, state }
+     *   where jobs is { id, title, companyHandle, status }
      *
      * Throws NotFoundError if user not found.
      **/
     static async get(username) {
-        const { rows: userRes } = await db.query(`
-            SELECT username,
-                   first_name AS "firstName",
-                   last_name AS "lastName",
-                   email,
-                   is_admin AS "isAdmin"
-            FROM users
-            WHERE username = $1
-        `, [ username ]);
+        const [ { rows: user }, { rows: jobs } ] = await Promise.all([
+            db.query(`
+                SELECT username,
+                       first_name AS "firstName",
+                       last_name  AS "lastName",
+                       email,
+                       is_admin   AS "isAdmin"
+                FROM users WHERE username = $1
+            `, [ username ]),
+            db.query(`
+                SELECT applications.job_id AS "id",
+                       applications.status,
+                       jobs.title,
+                       jobs.company_handle AS "companyHandle"
+                FROM applications
+                LEFT JOIN jobs ON applications.job_id = jobs.id
+                WHERE username = $1
+            `, [ username ])
+        ]);
 
-        if (!userRes.length)
+        if (!user.length)
             throw new NotFoundError(`No user: ${username}`);
+        
+        return { ...user[0], jobs };
+    }
 
-        return userRes[0];
+    /** Makes user apply for a given job.
+     * 
+     * Throws NotFoundError if user or job not found.
+     **/
+    static async applyForJob(username, jobId, status = 'interested') {
+        const [
+            { rows: { length: userCheck } },
+            { rows: { length: jobCheck } }
+        ] = await Promise.all([
+            db.query("SELECT username FROM users WHERE username = $1", [ username ]),
+            db.query("SELECT id FROM jobs WHERE id = $1", [ jobId ])
+        ]);
+
+        if (!userCheck)
+            throw new NotFoundError(`No user: ${username}`);
+        if (!jobCheck)
+            throw new NotFoundError(`No job: ${jobId}`);
+
+        try {
+            await db.query(`
+                INSERT INTO applications (username, job_id, status)
+                VALUES ($1, $2, $3)
+            `, [ username, jobId, status ]);
+        } catch (err) {
+            switch (err.code) {
+            case '23505':
+                throw new BadRequestError("Already have an application for this job");
+
+            case '22P02':
+                throw new BadRequestError("Invalid application status");
+
+            default:
+                throw err;
+            }
+        }
+    }
+
+    /** Removes interest in a given job.
+     * 
+     * If isAdmin is true, can remove an application regardless of status. Otherwise, only
+     * applications with status "interested" can be removed.
+     * 
+     * Throws NotFoundError if user or job not found.
+     **/
+    static async removeJob(username, jobId, isAdmin = false) {
+        const [
+            { rows: { length: userCheck } },
+            { rows: { length: jobCheck } },
+            { rows: application }
+        ] = await Promise.all([
+            db.query("SELECT username FROM users WHERE username = $1", [ username ]),
+            db.query("SELECT id FROM jobs WHERE id = $1", [ jobId ]),
+            db.query(
+                "SELECT status FROM applications WHERE username = $1 AND job_id = $2",
+                [ username, jobId ]
+            )
+        ]);
+
+        if (!userCheck)
+            throw new NotFoundError(`No user: ${username}`);
+        if (!jobCheck)
+            throw new NotFoundError(`No job: ${jobId}`);
+        if (!application.length)
+            throw new NotFoundError(`No application for ${jobId}`);
+        
+        let queryString = "DELETE FROM applications WHERE username = $1 AND job_id = $2";
+        if (!isAdmin)
+            queryString += " AND status = 'interested'";
+        
+        const { rows: { length: deleteCheck } } = await db.query(
+            queryString + " RETURNING job_id",
+            [ username, jobId ]
+        );
+
+        if (!deleteCheck)
+            throw new UnauthorizedError(`Cannot remove job with status "${application[0].status}"`);
     }
 
     /** Update user data with `data`.

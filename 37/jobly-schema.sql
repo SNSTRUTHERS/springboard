@@ -32,6 +32,6 @@ CREATE TABLE applications (
         REFERENCES users ON DELETE CASCADE,
     job_id INTEGER
         REFERENCES jobs ON DELETE CASCADE,
-    status application_status,
+    status application_status DEFAULT 'applied',
     PRIMARY KEY (username, job_id)
 );

@@ -6,12 +6,17 @@ const express = require("express");
 const { validate: validateSchema } = require("jsonschema");
 const { generate: generatePassword } = require("generate-password");
 
-const { ensureIsAdmin, ensureCorrectUserOrAdmin } = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
-const User = require("../models/user");
+
 const { createToken } = require("../helpers/tokens");
-const userNewSchema = require("../schemas/userNew.json");
-const userUpdateSchema = require("../schemas/userUpdate.json");
+
+const { ensureIsAdmin, ensureCorrectUserOrAdmin } = require("../middleware/auth");
+
+const User = require("../models/user");
+
+const userNewSchema        = require("../schemas/userNew.json");
+const userUpdateSchema     = require("../schemas/userUpdate.json");
+const applicationNewSchema = require("../schemas/applicationNew.json");
 
 /** @type {express.Router} */
 const router = express.Router();
@@ -30,9 +35,9 @@ const router = express.Router();
  **/
 router.post("/", ensureIsAdmin, async (req, res, next) => {
     try {
-        const validator = validateSchema(req.body, userNewSchema);
-        if (!validator.valid) {
-            const errs = validator.errors.map(e => e.stack);
+        const { valid, errors } = validateSchema(req.body, userNewSchema);
+        if (!valid) {
+            const errs = errors.map((e) => e.stack);
             throw new BadRequestError(errs);
         }
 
@@ -50,7 +55,6 @@ router.post("/", ensureIsAdmin, async (req, res, next) => {
     }
 });
 
-
 /** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
  *
  * Returns list of all users.
@@ -66,10 +70,10 @@ router.get("/", ensureIsAdmin, async (req, res, next) => {
     }
 });
 
-
 /** GET /[username] => { user }
  *
- * Returns { username, firstName, lastName, isAdmin }
+ * Returns { username, firstName, lastName, isAdmin, jobs }
+ *   where jobs = [ { id, title, salary, equity, status }, ... ]
  *
  * Authorization required: admin or given user
  **/
@@ -82,7 +86,6 @@ router.get("/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
     }
 });
 
-
 /** PATCH /[username] { user } => { user }
  *
  * Data can include:
@@ -94,9 +97,9 @@ router.get("/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
  **/
 router.patch("/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
     try {
-        const validator = validateSchema(req.body, userUpdateSchema);
-        if (!validator.valid) {
-            const errs = validator.errors.map(e => e.stack);
+        const { valid, errors } = validateSchema(req.body, userUpdateSchema);
+        if (!valid) {
+            const errs = errors.map((e) => e.stack);
             throw new BadRequestError(errs);
         }
 
@@ -107,16 +110,62 @@ router.patch("/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
     }
 });
 
-
 /** DELETE /[username]  =>  { deleted: username }
  *
  * Authorization required: admin or given user
  **/
-
 router.delete("/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
     try {
         await User.remove(req.params.username);
         return res.json({ deleted: req.params.username });
+    } catch (err) {
+        return next(err);
+    }
+});
+
+/** POST /[username]/jobs/[id]  =>  { applied: jobId }
+ * Data can include:
+ *   { status: "interested" | "applied" }
+ * 
+ * Applies or states interest in an existing job.
+ * 
+ * Authorization required: admin or given user
+ **/
+router.post("/:username/jobs/:id", ensureCorrectUserOrAdmin, async (req, res, next) => {
+    try {
+        const { valid, errors } = validateSchema(req.body, applicationNewSchema);
+        if (!valid) {
+            const errs = errors.map((e) => e.stack);
+            throw new BadRequestError(errs);
+        }
+
+        const id = Number(req.params.id);
+        const { status } = req.body;
+        if (isNaN(id))
+            throw BadRequestError(`No job: ${req.params.id}`);
+
+        await User.applyForJob(req.params.username, id, status);
+        return res.json({ [status]: id });
+    } catch (err) {
+        return next(err);
+    }
+});
+
+/** DELETE /[username]/jobs/[id]  =>  { deleted: jobId }
+ * 
+ * Removes interest in a job. Admins can remove a job regardless of status. Regular users
+ * can only remove jobs that are labeled as "interested".
+ * 
+ * Authorization required: admin or given user
+ **/
+router.delete("/:username/jobs/:id", ensureCorrectUserOrAdmin, async (req, res, next) => {
+    try {
+        const id = Number(req.params.id);
+        if (isNaN(id))
+            throw BadRequestError(`No job: ${req.params.id}`);
+
+        await User.removeJob(req.params.username, id, res.locals.user.isAdmin);
+        return res.json({ deleted: id });
     } catch (err) {
         return next(err);
     }
