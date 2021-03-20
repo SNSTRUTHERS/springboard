@@ -95,16 +95,16 @@ describe("GET /companies", () => {
                     title: "J2",
                     salary: 200000,
                     equity: "0.125",
-                    companyHandle: 'c2',
-                    companyName: "C2",
+                    companyHandle: 'c1',
+                    companyName: "C1",
                 },
                 {
                     id: jobIdMap.get("J3"),
                     title: "J3",
                     salary: 300000,
                     equity: "0",
-                    companyHandle: 'c3',
-                    companyName: "C3",
+                    companyHandle: 'c2',
+                    companyName: "C2",
                 },
             ],
         });
@@ -136,16 +136,16 @@ describe("GET /companies", () => {
                     title: "J2",
                     salary: 200000,
                     equity: "0.125",
-                    companyHandle: 'c2',
-                    companyName: "C2",
+                    companyHandle: 'c1',
+                    companyName: "C1",
                 },
                 {
                     id: jobIdMap.get("J3"),
                     title: "J3",
                     salary: 300000,
                     equity: "0",
-                    companyHandle: 'c3',
-                    companyName: "C3",
+                    companyHandle: 'c2',
+                    companyName: "C2",
                 },
             ]
         });
@@ -172,8 +172,8 @@ describe("GET /companies", () => {
                     title: "J2",
                     salary: 200000,
                     equity: "0.125",
-                    companyHandle: 'c2',
-                    companyName: "C2",
+                    companyHandle: 'c1',
+                    companyName: "C1",
                 },
             ]
         });

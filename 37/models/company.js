@@ -96,25 +96,28 @@ class Company {
     /** Given a company handle, return data about company.
      *
      * Returns { handle, name, description, numEmployees, logoUrl, jobs }
-     *   where jobs is [{ id, title, salary, equity, companyHandle }, ...]
+     *   where jobs is [{ id, title, salary, equity }, ...]
      *
      * Throws NotFoundError if not found.
      **/
-    static async get(handle) {
-        const { rows: companyRes } = await db.query(`
-            SELECT handle,
-                   name,
-                   description,
-                   num_employees AS "numEmployees",
-                   logo_url AS "logoUrl"
-            FROM companies
-            WHERE handle = $1
-        `, [ handle ]);
+    static async get(companyHandle) {
+        const [ { rows: company }, { rows: jobs } ] = await Promise.all([
+            db.query(`
+                SELECT handle, name, description,
+                       num_employees AS "numEmployees",
+                       logo_url AS "logoUrl"
+                FROM companies WHERE handle = $1
+            `, [ companyHandle ]),
+            db.query(`
+                SELECT id, title, salary, equity
+                FROM jobs WHERE company_handle = $1
+            `, [ companyHandle ])
+        ]);
 
-        if (!companyRes.length)
-            throw new NotFoundError(`No company: ${handle}`);
+        if (!company.length)
+            throw new NotFoundError(`No company: ${companyHandle}`);
 
-        return companyRes[0];
+        return { ...company[0], jobs };
     }
 
     /** Update company data with `data`.

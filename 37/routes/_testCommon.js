@@ -78,7 +78,7 @@ async function commonBeforeAll() {
         title: "J2",
         salary: 200000,
         equity: "0.125",
-        companyHandle: "c2"
+        companyHandle: "c1"
     });
     jobIdMap.set("J2", id2);
 
@@ -86,7 +86,7 @@ async function commonBeforeAll() {
         title: "J3",
         salary: 300000,
         equity: "0",
-        companyHandle: "c3"
+        companyHandle: "c2"
     });
     jobIdMap.set("J3", id3);
 }
