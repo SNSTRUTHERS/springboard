@@ -1,0 +1,16 @@
+.Pokecard {
+    background: #00000040;
+    border-radius: 2em;
+    padding: 2em;
+
+    text-align: center;
+}
+
+.Pokecard > img {
+    transform: scale(2);
+    image-rendering: crisp-edges;
+}
+
+.Pokecard > h2 {
+    color: blue;
+}

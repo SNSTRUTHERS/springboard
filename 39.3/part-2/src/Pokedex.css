@@ -1,0 +1,17 @@
+.Pokedex {
+    display: grid;
+
+    grid-template-columns: 20% 20% 20% 20%;
+    gap: 5%;
+
+    width: 80vw;
+}
+
+.Pokedex-title {
+    color: #a0a0a0;
+    
+    font-size: 300%;
+
+    margin-top: -1em;
+    margin-bottom: 1em;
+}
