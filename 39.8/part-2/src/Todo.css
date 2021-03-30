@@ -1,0 +1,41 @@
+.Todo {
+    list-style-type: none;
+
+    padding: 0.75em 0em;
+}
+
+.Todo:nth-child(2n) {
+    background: #ffffff;
+}
+
+.Todo:nth-child(2n):hover {
+    background: #efefef;
+}
+
+.Todo:nth-child(2n):hover {
+    background: #e8e8e8;
+}
+
+.Todo:nth-child(2n+1) {
+    background: #f8f8f8;
+}
+
+.Todo:nth-child(2n+1):hover {
+    background: #e8e8e8;
+}
+
+.Todo:nth-child(2n+1):active {
+    background: #e0e0e0;
+}
+
+.Todo button {
+    background: #ff0000;
+}
+
+.Todo button:hover {
+    background: #cf0000;
+}
+
+.Todo button:active {
+    background: #af0000;
+}

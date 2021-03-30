@@ -1,0 +1,25 @@
+.Box {
+    margin-right: 0.125em;
+}
+
+.Box > button {
+    all: unset;
+
+    background: #80808040;
+    color: red;
+
+    border-radius: 1em;
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    float: right;
+
+    margin-right: 0.3em;
+    
+    width: 1.5em;
+    height: 1.5em;
+}

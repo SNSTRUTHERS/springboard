@@ -1,0 +1,4 @@
+.BoxList {
+    display: flex;
+    flex-flow: row wrap;
+}

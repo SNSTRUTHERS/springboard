@@ -1,0 +1,32 @@
+body {
+    background: #dedede;
+
+    font-family: 'Times New Roman', Times, serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    font-size: 20px;
+    
+    margin: 0;
+}
+
+.todo-button {
+    all: unset;
+    cursor: pointer;
+
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 12px;
+    height: 12px;
+
+    margin: 0em 0.75em 0em 1.25em;
+    padding: 0 0.5em;
+
+    border-radius: 12px;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

@@ -1,0 +1,40 @@
+.NewTodoForm {
+    background: #c0c0c0;
+    padding: 0.75em 0em;
+    margin: 0;
+
+    overflow-x: hidden;
+
+    position: relative;
+}
+
+.NewTodoForm input[type="text"] {
+    all: unset;
+    font: inherit;
+
+    margin-left: 3.8em;
+    
+    padding: 0.75em 0em;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    width: 100%;
+}
+
+.NewTodoForm input[type="text"]::placeholder {
+    color: #383838;
+}
+
+.NewTodoForm input[type="submit"] {
+    background: #00ff00;
+}
+
+.NewTodoForm input[type="submit"]:hover {
+    background: #00cf00;
+}
+
+.NewTodoForm input[type="submit"]:active {
+    background: #00af00;
+}
