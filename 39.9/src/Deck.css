@@ -1,0 +1,27 @@
+.Deck {
+    display: flex;
+    flex-flow: column;
+
+    width: 50%;
+    height: 50%;
+}
+
+.Deck > h1 {
+    justify-self: center;
+    align-self: center;
+
+    text-align: center;
+}
+
+.Deck > button {
+    flex: 0;
+
+    margin-bottom: 3em;
+}
+
+.Deck > div {
+    position: relative;
+
+    width: 100%;
+    margin-left: 35%;
+}
