@@ -1,0 +1,38 @@
+.Homepage > ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 0 0;
+
+    list-style: none;
+}
+
+.Homepage > ul a {
+    background: #e4e4e4;
+    color: #606060;
+
+    border-radius: 32px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5em;
+    font-weight: bold;
+
+    margin-top: 0;
+    margin-bottom: 1.5em;
+
+    width: 320px;
+    height: 160px;
+}
+.Homepage > ul a:hover {
+    background-color: #e8e8e8;
+
+    text-decoration: none;
+}
+.Homepage > ul a:active {
+    background-color: #ececec;
+}

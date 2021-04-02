@@ -1,0 +1,17 @@
+.Navbar {
+    background-color: #434252;
+    
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+    text-align: center;
+}
+
+.Navbar > a {
+    color: white;
+
+    margin: 0 1em;
+}
+.Navbar > a.active {
+    font-weight: bold;
+}
