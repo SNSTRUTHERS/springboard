@@ -1,0 +1,5 @@
+.ColorForm > input[type="color"] {
+    background-color: attr(value color);
+    content: attr(value);
+}
+

@@ -1,0 +1,37 @@
+.Homepage > header {
+    background: #333;
+    color: #fff;
+
+    font-size: 1.2rem;
+
+    padding: 4rem 0;
+}
+
+.Homepage > header > a {
+    color: white !important;
+    
+    font-size: 2em;
+    font-weight: bold;
+
+    margin-top: 1em;
+
+    text-decoration: none;
+
+    width: auto;
+}
+.Homepage > header > a:hover {
+    text-decoration: underline;
+}
+
+.Homepage > main > a {
+    color : #333;
+
+    font-size: 1.3em;
+    
+    text-decoration: none;
+}
+.Homepage > main > a:hover {
+    color: #000;
+    
+    text-decoration: underline;
+}
