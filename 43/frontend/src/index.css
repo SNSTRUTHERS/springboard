@@ -1,0 +1,11 @@
+form {
+    text-align: left;
+}
+
+form > h1 {
+    text-align: center;
+}
+
+form > button:last-of-type {
+    margin: 0 auto;
+}

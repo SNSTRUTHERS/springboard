@@ -1,0 +1,6 @@
+.NavBar a:not(.dropdown-item) {
+    color: white;
+}
+.NavBar a.active {
+    font-weight: bold;
+}
