@@ -547,8 +547,8 @@ other arithmetic comparison operators) result in a boolean literal `true` or
 the left and right side of these comparisons and are converted to `number`s for
 the comparison.
 
-In the first line, `1 < 2` gets evaluated to `false`, which is subsequently
-converted to `0` when compared against `3`. `0 < 3` is `true`.
+In the first line, `1 < 2` gets evaluated to `true`, which is subsequently
+converted to `1` when compared against `3`. `1 < 3` is `true`.
 
 In the second line, `3 > 2` is evaluated to `true`, which is converted to `1`
 when compared against `1`. `1 > 1` is `false`.
